@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Copy → Post</title>
+
+  <style>
+    :root {
+      --bg:#0b0f17;
+      --card:#121a27;
+      --text:#e6edf6;
+      --muted:#a9b4c0;
+      --line:#233044;
+      --btn:#1f6feb;
+    }
+    body {
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 24px; }
+    header { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    h1 { margin:0; font-size:22px; }
+    .sub { color:var(--muted); font-size:14px; margin-top:6px; }
+
+    button, a.action {
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+      text-decoration:none;
+      display:inline-block;
+    }
+    .primary { background:var(--btn); border-color:var(--btn); }
+
+    .grid { margin-top:20px; display:grid; gap:14px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; }
+    .card pre { margin:0; white-space:pre-wrap; line-height:1.55; font-size:15px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+
+    .toast {
+      position:fixed; bottom:16px; left:50%;
+      transform:translateX(-50%);
+      background:rgba(18,26,39,.95);
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:12px;
+      display:none; font-size:14px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Copy → Post</h1>
+      <div class="sub">Pick a message or post directly on X.</div>
+      <div class="sub">📌 Today’s move: reply to at least one relevant post.</div>
+    </div>
+  </header>
+
+  <div class="grid" id="cards"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const toast = msg => {
+  const t = $("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 1200);
+};
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Copied");
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    toast("Copied");
+  }
+}
+
+// Twitter / X intent URL
+function xIntentUrl(text, hashtagsString) {
+  const url = new URL("https://twitter.com/intent/tweet");
+  url.searchParams.set("text", text);
+  if (hashtagsString) {
+    const tags = hashtagsString
+      .split(/\s+/)
+      .map(t => t.replace(/^#/, ""))
+      .filter(Boolean);
+    if (tags.length) url.searchParams.set("hashtags", tags.join(","));
+  }
+  return url.toString();
+}
+
+async function init() {
+  const res = await fetch("data.json?v=" + Date.now());
+  const data = await res.json();
+
+  const messages = data.messages.en || [];
+  const hashtags = data.hashtags.en || "";
+
+  const grid = $("cards");
+  grid.innerHTML = "";
+
+  messages.forEach(msg => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const pre = document.createElement("pre");
+    pre.textContent = msg;
+    card.appendChild(pre);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.textContent = "Copy";
+    copyBtn.onclick = () => copyText(msg);
+    actions.appendChild(copyBtn);
+
+    const copyAllBtn = document.createElement("button");
+    copyAllBtn.textContent = "Copy + hashtags";
+    copyAllBtn.onclick = () => copyText(msg + "\n\n" + hashtags);
+    actions.appendChild(copyAllBtn);
+
+    const xBtn = document.createElement("a");
+    xBtn.className = "action primary";
+    xBtn.href = xIntentUrl(msg, hashtags);
+    xBtn.target = "_blank";
+    xBtn.rel = "noopener";
+    xBtn.textContent = "Post on X";
+    actions.appendChild(xBtn);
+
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
