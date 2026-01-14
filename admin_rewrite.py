@@ -30,9 +30,10 @@ def git_commit_and_push(message="Update messages"):
         subprocess.run(["git", "add", "data.json"], check=True)
         subprocess.run(["git", "commit", "-m", message], check=True)
         subprocess.run(["git", "push"], check=True)
-        print("✓ Git push completed")
+        return True
     except subprocess.CalledProcessError as e:
         print("✗ Git operation failed:", e)
+        return False
 
 
 def get_client() -> OpenAI:
@@ -104,10 +105,12 @@ def main():
     if args.write:
         target = Path(args.file)
         target.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        git_commit_and_push("Daily message update")
-        print("\n=== WROTE FILE ===")
-        print(f"Updated: {target.resolve()}")
-        print("\n=== WROTE FILE & PUSHED TO GITHUB ===")
+        ok = git_commit_and_push("Daily message update")
+        if ok:
+            print("=== WROTE FILE & PUSHED TO GITHUB ===")
+        else:
+            print("=== WROTE FILE (PUSH FAILED) ===")
+
         print(f"Updated: {target.resolve()}")
 
 if __name__ == "__main__":
