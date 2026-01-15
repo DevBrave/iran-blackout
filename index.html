@@ -201,6 +201,34 @@
       display: none;
       font-size: 14px;
     }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .platform-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      opacity: 0.95;
+    }
+
+    /* make pasted SVG fit nicely */
+    .platform-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .platform-icon {
+      color: var(--text);
+      /* or --muted */
+    }
   </style>
 </head>
 
@@ -208,7 +236,7 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <img src="Iran.png" alt="Iran flag" class="brand-flag" />
+        <img src="src/Iran.png" alt="Iran flag" class="brand-flag" />
 
         <div class="brand-text">
           <h1>Copy → Post</h1>
@@ -280,27 +308,38 @@
       return card;
     }
 
-    function sectionShell(title, desc) {
+    function sectionShell(title, desc, iconSvgHtml = "") {
       const sec = document.createElement("div");
       sec.className = "section";
 
       const head = document.createElement("div");
       head.className = "section-head";
 
+      const titleRow = document.createElement("div");
+      titleRow.className = "section-title-row";
+
+      const icon = document.createElement("span");
+      icon.className = "platform-icon";
+      icon.innerHTML = iconSvgHtml; // paste SVG string here
+      titleRow.appendChild(icon);
+
       const h = document.createElement("h2");
       h.className = "section-title";
       h.textContent = title;
+
+      titleRow.appendChild(h);
 
       const d = document.createElement("p");
       d.className = "section-desc";
       d.textContent = desc;
 
-      head.appendChild(h);
+      head.appendChild(titleRow);
       head.appendChild(d);
       sec.appendChild(head);
 
       return sec;
     }
+
 
     function addGroup(sectionEl, groupTitle, items, renderCardFn) {
       const group = document.createElement("div");
@@ -330,12 +369,23 @@
       const root = $("content");
       root.innerHTML = "";
 
+      const X_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor"
+    d="M18.9 2H21l-6.6 7.6L22 22h-6.2l-4.9-6.4L5.3 22H3l7-8.1L2 2h6.3l4.4 5.8L18.9 2zm-2.1 18h1.7L7.3 4H5.5l11.3 16z"/>
+</svg>
+`;   // <-- paste X svg here
+      const IG_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor"
+    d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 2 .3 2.5.5.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.5.4 1.3.5 2.5.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 2-.5 2.5-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.5.2-1.3.4-2.5.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2-.3-2.5-.5-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.5-.4-1.3-.5-2.5-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.3-2 .5-2.5.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.5-.2 1.3-.4 2.5-.5 1.3-.1 1.7-.1 4.9-.1zm0 1.8c-3.1 0-3.4 0-4.6.1-1.1.1-1.7.3-2.1.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.4-.4 1-.4 2.1-.1 1.2-.1 1.5-.1 4.6s0 3.4.1 4.6c.1 1.1.3 1.7.4 2.1.2.4.4.7.7 1 .3.3.6.5 1 .7.4.2 1 .4 2.1.4 1.2.1 1.5.1 4.6.1s3.4 0 4.6-.1c1.1-.1 1.7-.3 2.1-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.4.4-1 .4-2.1.1-1.2.1-1.5.1-4.6s0-3.4-.1-4.6c-.1-1.1-.3-1.7-.4-2.1-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.4-.2-1-.4-2.1-.4-1.2-.1-1.5-.1-4.6-.1zm0 3.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2zm0 1.8a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6zm5.4-.6a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2z"/>
+</svg>
+`;  // <-- paste Instagram svg here
       // ---------------------------
       // SECTION: X
       // ---------------------------
       const xSec = sectionShell(
         "X (Twitter)",
-        "Short messages for replies and posts. Use 'Post on X' to open the composer with the selected text."
+        "Short messages for replies and posts. Use 'Post on X' to open the composer with the selected text.",
+        X_SVG
       );
 
       const xShort = data.messages?.x?.short || [];
@@ -374,7 +424,8 @@
       // ---------------------------
       const igCapSec = sectionShell(
         "Instagram — Caption",
-        "Longer captions for posts. Instagram does not support pre-filled captions via a public link, so copy then open Instagram."
+        "Longer captions for posts. Copy then open Instagram.",
+        IG_SVG
       );
 
       const igCaption = data.messages?.instagram?.caption || [];
@@ -408,9 +459,9 @@
       // ---------------------------
       const igStorySec = sectionShell(
         "Instagram — Story Text",
-        "Short text blocks for stories. Copy and paste into your Story editor."
+        "Short text blocks for stories. Copy and paste into your Story editor.",
+        IG_SVG
       );
-
       const igStory = data.messages?.instagram?.story || [];
 
       addGroup(igStorySec, "Story Text", igStory, (text) =>
