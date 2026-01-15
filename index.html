@@ -1,5 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,167 +8,454 @@
 
   <style>
     :root {
-      --bg:#0b0f17;
-      --card:#121a27;
-      --text:#e6edf6;
-      --muted:#a9b4c0;
-      --line:#233044;
-      --btn:#1f6feb;
+      --bg: #0b0f17;
+      --card: #121a27;
+      --text: #e6edf6;
+      --muted: #a9b4c0;
+      --line: #233044;
+      --btn: #1f6feb;
+      --btn2: #2ea043;
     }
+
     body {
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-    .wrap { max-width: 860px; margin: 0 auto; padding: 24px; }
-    header { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-    h1 { margin:0; font-size:22px; }
-    .sub { color:var(--muted); font-size:14px; margin-top:6px; }
 
-    button, a.action {
-      border:1px solid var(--line);
-      background:transparent;
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:10px;
-      cursor:pointer;
-      font-size:14px;
-      text-decoration:none;
-      display:inline-block;
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
     }
-    .primary { background:var(--btn); border-color:var(--btn); }
 
-    .grid { margin-top:20px; display:grid; gap:14px; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; }
-    .card pre { margin:0; white-space:pre-wrap; line-height:1.55; font-size:15px; }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .section {
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .section-head {
+      padding: 14px 14px 10px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .section-desc {
+      margin: 6px 0 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .group {
+      padding: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .group:first-of-type {
+      border-top: none;
+    }
+
+    .group-title {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: var(--text);
+      opacity: 0.95;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .card pre {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+
+    .brand-flag {
+      width: 6rem;
+      height: auto;
+      border-radius: 0.375rem;
+      border: 0.0625rem solid var(--line);
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .30);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      margin: 0;
+      font-size: 1.375rem;
+    }
+
+    .brand-text .sub {
+      margin-top: 0.375rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+
+    /* Mobile layout: flag on top */
+    @media (max-width: 37.5rem) {
+      .brand {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.75rem;
+      }
+
+      .brand-flag {
+        width: 6rem;
+      }
+
+      .brand-text h1 {
+        font-size: 1.25rem;
+      }
+
+      .brand-text .sub {
+        font-size: 0.875rem;
+      }
+    }
+
+
+    button,
+    a.action {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .primary {
+      background: var(--btn);
+      border-color: var(--btn);
+    }
+
+    .secondary {
+      background: var(--btn2);
+      border-color: var(--btn2);
+    }
 
     .toast {
-      position:fixed; bottom:16px; left:50%;
-      transform:translateX(-50%);
-      background:rgba(18,26,39,.95);
-      border:1px solid var(--line);
-      padding:10px 14px;
-      border-radius:12px;
-      display:none; font-size:14px;
-    }
-
-    .iran-flag-img {
-      width: 48px;
-      height: auto;
-      border-radius: 6px;
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 26, 39, 0.95);
       border: 1px solid var(--line);
-      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: none;
+      font-size: 14px;
     }
-
   </style>
 </head>
+
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img src="Iran.png" alt="Iran flag" class="brand-flag" />
 
-  <header>
- <div style="display:flex;align-items:center;gap:14px;">
-    <img src="Iran.png"
-         alt="Iran Flag"
-         class="iran-flag-img" />
-    <div>
-      <h1>Copy → Post</h1>
-      <div class="sub">Pick a message or post directly on X.</div>
-     
-    </div>
-  </header>
+        <div class="brand-text">
+          <h1>Copy → Post</h1>
+          <div class="sub">Pick a message or post directly on X.</div>
+          <div class="sub">Tip: for X, keep text short and add hashtags separately if needed.</div>
+        </div>
+      </div>
+    </header>
 
-  <div class="grid" id="cards"></div>
 
-</div>
+    <div id="content"></div>
+  </div>
 
-<div class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
-<script>
-const $ = id => document.getElementById(id);
+  <script>
+    const $ = (id) => document.getElementById(id);
 
-const toast = msg => {
-  const t = $("toast");
-  t.textContent = msg;
-  t.style.display = "block";
-  setTimeout(() => t.style.display = "none", 1200);
-};
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => (t.style.display = "none"), 1200);
+    }
 
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    toast("Copied");
-  } catch {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    document.body.removeChild(ta);
-    toast("Copied");
-  }
-}
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Copied");
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Copied");
+      }
+    }
 
-// Twitter / X intent URL
-function xIntentUrl(text, hashtagsString) {
-  const url = new URL("https://twitter.com/intent/tweet");
-  url.searchParams.set("text", text);
-  if (hashtagsString) {
-    const tags = hashtagsString
-      .split(/\s+/)
-      .map(t => t.replace(/^#/, ""))
-      .filter(Boolean);
-    if (tags.length) url.searchParams.set("hashtags", tags.join(","));
-  }
-  return url.toString();
-}
+    // Twitter / X intent URL
+    function xIntentUrl(text, hashtagsString) {
+      const url = new URL("https://twitter.com/intent/tweet");
+      url.searchParams.set("text", text);
 
-async function init() {
-  const res = await fetch("data.json?v=" + Date.now());
-  const data = await res.json();
+      if (hashtagsString) {
+        const tags = hashtagsString
+          .split(/\s+/)
+          .map((t) => t.replace(/^#/, ""))
+          .filter(Boolean);
+        if (tags.length) url.searchParams.set("hashtags", tags.join(","));
+      }
+      return url.toString();
+    }
 
-  const messages = data.messages.en || [];
-  const hashtags = data.hashtags.en || "";
+    function makeCard(text, actionsBuilder) {
+      const card = document.createElement("div");
+      card.className = "card";
 
-  const grid = $("cards");
-  grid.innerHTML = "";
+      const pre = document.createElement("pre");
+      pre.textContent = text;
+      card.appendChild(pre);
 
-  messages.forEach(msg => {
-    const card = document.createElement("div");
-    card.className = "card";
+      const actions = document.createElement("div");
+      actions.className = "actions";
+      actionsBuilder(actions, text);
 
-    const pre = document.createElement("pre");
-    pre.textContent = msg;
-    card.appendChild(pre);
+      card.appendChild(actions);
+      return card;
+    }
 
-    const actions = document.createElement("div");
-    actions.className = "actions";
+    function sectionShell(title, desc) {
+      const sec = document.createElement("div");
+      sec.className = "section";
 
-    const copyBtn = document.createElement("button");
-    copyBtn.textContent = "Copy";
-    copyBtn.onclick = () => copyText(msg);
-    actions.appendChild(copyBtn);
+      const head = document.createElement("div");
+      head.className = "section-head";
 
-    const copyAllBtn = document.createElement("button");
-    copyAllBtn.textContent = "Copy + hashtags";
-    copyAllBtn.onclick = () => copyText(msg + "\n\n" + hashtags);
-    actions.appendChild(copyAllBtn);
+      const h = document.createElement("h2");
+      h.className = "section-title";
+      h.textContent = title;
 
-    const xBtn = document.createElement("a");
-    xBtn.className = "action primary";
-    xBtn.href = xIntentUrl(msg, hashtags);
-    xBtn.target = "_blank";
-    xBtn.rel = "noopener";
-    xBtn.textContent = "Post on X";
-    actions.appendChild(xBtn);
+      const d = document.createElement("p");
+      d.className = "section-desc";
+      d.textContent = desc;
 
-    card.appendChild(actions);
-    grid.appendChild(card);
-  });
-}
+      head.appendChild(h);
+      head.appendChild(d);
+      sec.appendChild(head);
 
-init();
-</script>
+      return sec;
+    }
+
+    function addGroup(sectionEl, groupTitle, items, renderCardFn) {
+      const group = document.createElement("div");
+      group.className = "group";
+
+      const t = document.createElement("h3");
+      t.className = "group-title";
+      t.textContent = groupTitle;
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+
+      items.forEach((text) => grid.appendChild(renderCardFn(text)));
+
+      group.appendChild(t);
+      group.appendChild(grid);
+      sectionEl.appendChild(group);
+    }
+
+    async function init() {
+      const res = await fetch("data.json?v=" + Date.now());
+      const data = await res.json();
+
+      const hashtagsX = data.hashtags?.x || "";
+      const hashtagsIG = data.hashtags?.instagram || "";
+
+      const root = $("content");
+      root.innerHTML = "";
+
+      // ---------------------------
+      // SECTION: X
+      // ---------------------------
+      const xSec = sectionShell(
+        "X (Twitter)",
+        "Short messages for replies and posts. Use 'Post on X' to open the composer with the selected text."
+      );
+
+      const xShort = data.messages?.x?.short || [];
+      const xFactual = data.messages?.x?.factual || [];
+      const xCta = data.messages?.x?.cta || [];
+
+      const xCard = (text) =>
+        makeCard(text, (actions, msg) => {
+          const copyBtn = document.createElement("button");
+          copyBtn.textContent = "Copy";
+          copyBtn.onclick = () => copyText(msg);
+          actions.appendChild(copyBtn);
+
+          const copyAllBtn = document.createElement("button");
+          copyAllBtn.textContent = "Copy + hashtags";
+          copyAllBtn.onclick = () => copyText(msg + "\n\n" + hashtagsX);
+          actions.appendChild(copyAllBtn);
+
+          const xBtn = document.createElement("a");
+          xBtn.className = "action primary";
+          xBtn.href = xIntentUrl(msg, hashtagsX);
+          xBtn.target = "_blank";
+          xBtn.rel = "noopener";
+          xBtn.textContent = "Post on X";
+          actions.appendChild(xBtn);
+        });
+
+      addGroup(xSec, "Short / Punchy", xShort, xCard);
+      addGroup(xSec, "Factual / Credible", xFactual, xCard);
+      addGroup(xSec, "Call to Action", xCta, xCard);
+
+      root.appendChild(xSec);
+
+      // ---------------------------
+      // SECTION: Instagram Caption
+      // ---------------------------
+      const igCapSec = sectionShell(
+        "Instagram — Caption",
+        "Longer captions for posts. Instagram does not support pre-filled captions via a public link, so copy then open Instagram."
+      );
+
+      const igCaption = data.messages?.instagram?.caption || [];
+
+      addGroup(igCapSec, "Captions", igCaption, (text) =>
+        makeCard(text, (actions, msg) => {
+          const copyBtn = document.createElement("button");
+          copyBtn.textContent = "Copy caption";
+          copyBtn.onclick = () => copyText(msg);
+          actions.appendChild(copyBtn);
+
+          const copyTags = document.createElement("button");
+          copyTags.textContent = "Copy hashtags";
+          copyTags.onclick = () => copyText(hashtagsIG);
+          actions.appendChild(copyTags);
+
+          const openIG = document.createElement("a");
+          openIG.className = "action secondary";
+          openIG.href = "https://www.instagram.com/";
+          openIG.target = "_blank";
+          openIG.rel = "noopener";
+          openIG.textContent = "Open Instagram";
+          actions.appendChild(openIG);
+        })
+      );
+
+      root.appendChild(igCapSec);
+
+      // ---------------------------
+      // SECTION: Instagram Story Text
+      // ---------------------------
+      const igStorySec = sectionShell(
+        "Instagram — Story Text",
+        "Short text blocks for stories. Copy and paste into your Story editor."
+      );
+
+      const igStory = data.messages?.instagram?.story || [];
+
+      addGroup(igStorySec, "Story Text", igStory, (text) =>
+        makeCard(text, (actions, msg) => {
+          const copyBtn = document.createElement("button");
+          copyBtn.textContent = "Copy story text";
+          copyBtn.onclick = () => copyText(msg);
+          actions.appendChild(copyBtn);
+
+          const openIG = document.createElement("a");
+          openIG.className = "action secondary";
+          openIG.href = "https://www.instagram.com/";
+          openIG.target = "_blank";
+          openIG.rel = "noopener";
+          openIG.textContent = "Open Instagram";
+          actions.appendChild(openIG);
+        })
+      );
+
+      root.appendChild(igStorySec);
+
+      // ---------------------------
+      // SECTION: Bio
+      // ---------------------------
+      const bioSec = sectionShell(
+        "Bio / Profile",
+        "Short bio lines to place in profile descriptions."
+      );
+
+      const bio = data.messages?.bio || [];
+
+      addGroup(bioSec, "Bio options", bio, (text) =>
+        makeCard(text, (actions, msg) => {
+          const copyBtn = document.createElement("button");
+          copyBtn.textContent = "Copy bio";
+          copyBtn.onclick = () => copyText(msg);
+          actions.appendChild(copyBtn);
+        })
+      );
+
+      root.appendChild(bioSec);
+    }
+
+    init();
+  </script>
 </body>
+
 </html>

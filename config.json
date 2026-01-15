@@ -1,0 +1,14 @@
+{
+  "start_date": "2026-01-08",
+  "killed_estimate": 12000,
+  "injured_phrase": "countless injured",
+  "country": "Iran",
+  "regime_terms": "the Islamic regime and the IRGC",
+  "hashtags": {
+    "x": "#IranBlackout #FreeIran",
+    "instagram": "#IranBlackout #FreeIran"
+  },
+  "limits": {
+    "x_max_chars": 190
+  }
+}
